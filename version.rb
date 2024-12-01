@@ -1,5 +1,5 @@
 module Foobara
-  module LocalFilesCrudDriver
+  module LocalFilesCrudDriverVersion
     VERSION = "0.0.1".freeze
   end
 end

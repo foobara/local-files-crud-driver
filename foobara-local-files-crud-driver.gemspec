@@ -2,7 +2,7 @@ require_relative "version"
 
 Gem::Specification.new do |spec|
   spec.name = "foobara-local-files-crud-driver"
-  spec.version = Foobara::LocalFilesCrudDriver::VERSION
+  spec.version = Foobara::LocalFilesCrudDriverVersion::VERSION
   spec.authors = ["Miles Georgi"]
   spec.email = ["azimux@gmail.com"]
 
