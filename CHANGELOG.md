@@ -1,7 +1,7 @@
-## [Unreleased]
-
-- Move version.rb.erb to top-level
-
-## [0.0.1] - 2024-11-30
+## [0.0.1] - 2024-12-01
 
 - Initial release
+
+## [0.0.0] - 2024-11-30
+
+- Project birth
