@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    foobara-local-files-crud-driver (0.0.1)
+    foobara-local-files-crud-driver (0.0.3)
       foobara
 
 GEM

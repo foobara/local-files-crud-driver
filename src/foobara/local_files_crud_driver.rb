@@ -1,4 +1,7 @@
+require "fileutils"
+
 module Foobara
+  # TODO: lots of duplication in this file. Need to DRY this up a bit.
   class LocalFilesCrudDriver < Persistence::EntityAttributesCrudDriver
     attr_accessor :data_path, :format, :fsync, :multi_process
 
@@ -147,6 +150,8 @@ module Foobara
             return yield raw_data
           end
 
+          FileUtils.mkdir_p File.dirname(data_path)
+
           File.open(data_path, mode) do |f|
             f.flock(lock)
             yaml = f.read
@@ -171,6 +176,8 @@ module Foobara
             f.rewind
             f.write(YAML.dump(raw_data))
           else
+            FileUtils.mkdir_p File.dirname(data_path)
+
             File.open(data_path, "w") do |f|
               f.flock(File::LOCK_EX)
               retval = yield raw_data, f
