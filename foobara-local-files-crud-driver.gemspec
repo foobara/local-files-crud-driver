@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary = "Stores all record data in a yaml file in a local directory"
   spec.homepage = "https://github.com/foobara/local-files-crud-driver"
   spec.license = "MPL-2.0"
-  spec.required_ruby_version = ">= #{File.read("#{__dir__}/.ruby-version")}"
+  spec.required_ruby_version = Foobara::LocalFilesCrudDriverVersion::MINIMUM_RUBY_VERSION
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
