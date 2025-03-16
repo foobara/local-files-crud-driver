@@ -173,16 +173,21 @@ module Foobara
         with_readable_raw_data(mode: "r+", lock: File::LOCK_EX) do |raw_data, f|
           if f
             retval = yield raw_data, f
+            file_contents = YAML.dump(raw_data)
             f.truncate(0)
             f.rewind
-            f.write(YAML.dump(raw_data))
+            f.write(file_contents)
           else
             FileUtils.mkdir_p File.dirname(data_path)
 
-            File.open(data_path, "w") do |f|
+            File.open(data_path, "a+") do |f|
               f.flock(File::LOCK_EX)
+              f.rewind
               retval = yield raw_data, f
-              f.write(YAML.dump(raw_data))
+              file_contents = YAML.dump(raw_data)
+              f.truncate(0)
+              f.rewind
+              f.write(file_contents)
             end
           end
 
