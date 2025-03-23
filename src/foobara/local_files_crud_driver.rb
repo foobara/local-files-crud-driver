@@ -64,7 +64,8 @@ module Foobara
       end
 
       def insert(attributes)
-        attributes = Util.deep_dup(attributes)
+        attributes = prepare_attributes_for_write(attributes)
+
         record_id = record_id_for(attributes)
 
         unless record_id
@@ -91,6 +92,8 @@ module Foobara
       end
 
       def update(attributes)
+        attributes = prepare_attributes_for_write(attributes)
+
         with_writeable_raw_data do |raw_data|
           attributes = Util.deep_dup(attributes)
 
@@ -134,6 +137,23 @@ module Foobara
       end
 
       private
+
+      def prepare_attributes_for_write(value)
+        case value
+        when ::Time
+          value.to_f
+        when ::Date
+          value.to_s
+        when ::Array
+          value.map { |element| prepare_attributes_for_write(element) }
+        when ::Hash
+          value.to_h do |key, value|
+            [prepare_attributes_for_write(key), prepare_attributes_for_write(value)]
+          end
+        else
+          value
+        end
+      end
 
       def data_path
         crud_driver.data_path

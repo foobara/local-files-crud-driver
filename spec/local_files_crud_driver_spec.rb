@@ -16,6 +16,10 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
         id :integer
         name :string, :required
         age :integer, :required
+        date_stuff do
+          birthdays [:date]
+          created_at :datetime
+        end
       end
 
       primary_key :id
@@ -28,9 +32,9 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
   it "can persist records" do
     fumiko = nil
     Capybara.transaction do
-      fumiko = Capybara.create(name: "Fumiko", age: 100)
-      Capybara.create(name: "Barbara", age: 200)
-      Capybara.create(name: "Basil", age: 300)
+      fumiko = Capybara.create(name: "Fumiko", age: 100, date_stuff: { birthdays: [Date.today], created_at: Time.now })
+      Capybara.create(name: "Barbara", age: 200, date_stuff: { birthdays: [Date.today], created_at: Time.now })
+      Capybara.create(name: "Basil", age: 300, date_stuff: { birthdays: [Date.today], created_at: Time.now })
     end
 
     capybaras = Capybara.transaction do
@@ -77,9 +81,10 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
     it "can persist records" do
       fumiko = nil
       Capybara.transaction do
-        fumiko = Capybara.create(name: "Fumiko", age: 100)
-        Capybara.create(name: "Barbara", age: 200)
-        Capybara.create(name: "Basil", age: 300)
+        fumiko = Capybara.create(name: "Fumiko", age: 100,
+                                 date_stuff: { birthdays: [Date.today], created_at: Time.now })
+        Capybara.create(name: "Barbara", age: 200, date_stuff: { birthdays: [Date.today], created_at: Time.now })
+        Capybara.create(name: "Basil", age: 300, date_stuff: { birthdays: [Date.today], created_at: Time.now })
       end
 
       capybaras = Capybara.transaction do
