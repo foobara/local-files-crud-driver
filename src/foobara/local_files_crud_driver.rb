@@ -4,7 +4,7 @@ require "yaml"
 module Foobara
   # TODO: lots of duplication in this file. Need to DRY this up a bit.
   class LocalFilesCrudDriver < Persistence::EntityAttributesCrudDriver
-    attr_accessor :data_path, :format, :fsync, :multi_process
+    attr_accessor :data_path, :format, :fsync, :multi_process, :raw_data
 
     def initialize(data_path: "#{Dir.pwd}/local_data/records.yml", format: :yaml, fsync: false, multi_process: false)
       self.data_path = data_path
@@ -138,6 +138,10 @@ module Foobara
 
       private
 
+      def raw_data
+        crud_driver.raw_data
+      end
+
       def prepare_attributes_for_write(value)
         case value
         when ::Time
@@ -147,8 +151,8 @@ module Foobara
         when ::Array
           value.map { |element| prepare_attributes_for_write(element) }
         when ::Hash
-          value.to_h do |key, value|
-            [prepare_attributes_for_write(key), prepare_attributes_for_write(value)]
+          value.to_h do |key, inner_value|
+            [prepare_attributes_for_write(key), prepare_attributes_for_write(inner_value)]
           end
         else
           value
@@ -177,11 +181,11 @@ module Foobara
             f.flock(lock)
             yaml = f.read
             raw_data = yaml.empty? ? {} : YAML.load(yaml)
-            @raw_data = raw_data unless multi_process
+            crud_driver.raw_data = raw_data unless multi_process
             yield raw_data, f
           end
-        elsif defined?(@raw_data)
-          yield @raw_data
+        elsif self.raw_data
+          yield self.raw_data
         else
           with_readable_raw_data(load: true, lock:, mode:, &)
         end
@@ -200,19 +204,19 @@ module Foobara
           else
             FileUtils.mkdir_p File.dirname(data_path)
 
-            File.open(data_path, "a+") do |f|
-              f.flock(File::LOCK_EX)
-              f.rewind
-              retval = yield raw_data, f
+            File.open(data_path, "a+") do |file|
+              file.flock(File::LOCK_EX)
+              file.rewind
+              retval = yield raw_data, file
               file_contents = YAML.dump(raw_data)
-              f.truncate(0)
-              f.rewind
-              f.write(file_contents)
+              file.truncate(0)
+              file.rewind
+              file.write(file_contents)
             end
           end
 
           unless multi_process
-            @raw_data = raw_data
+            crud_driver.raw_data = raw_data
           end
         end
 

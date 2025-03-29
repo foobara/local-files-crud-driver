@@ -1,3 +1,7 @@
+## [0.0.8] - 2025-03-29
+
+- Fix bug where writing out one table erases another
+
 ## [0.0.7] - 2025-03-15
 
 - Make sure instances of Time and Date are written out in YAML-loadable ways
