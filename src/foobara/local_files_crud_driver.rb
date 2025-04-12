@@ -4,12 +4,11 @@ require "yaml"
 module Foobara
   # TODO: lots of duplication in this file. Need to DRY this up a bit.
   class LocalFilesCrudDriver < Persistence::EntityAttributesCrudDriver
-    attr_accessor :data_path, :format, :fsync, :multi_process, :raw_data
+    attr_accessor :data_path, :format, :multi_process, :raw_data
 
-    def initialize(data_path: "#{Dir.pwd}/local_data/records.yml", format: :yaml, fsync: false, multi_process: false)
+    def initialize(data_path: "#{Dir.pwd}/local_data/records.yml", format: :yaml, multi_process: false)
       self.data_path = data_path
       self.format = format
-      self.fsync = fsync
       self.multi_process = multi_process
 
       unless format == :yaml
