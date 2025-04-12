@@ -8,7 +8,7 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
   end
   let(:multi_process) { false }
 
-  let(:data_path) { "#{__dir__}/../../tmp/records.yml" }
+  let(:data_path) { "#{__dir__}/../tmp/records.yml" }
 
   before do
     stub_class "Capybara", Foobara::Entity do
