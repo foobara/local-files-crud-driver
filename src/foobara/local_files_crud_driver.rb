@@ -200,6 +200,7 @@ module Foobara
             f.truncate(0)
             f.rewind
             f.write(file_contents)
+            f.flush
           else
             FileUtils.mkdir_p File.dirname(data_path)
 
@@ -211,6 +212,7 @@ module Foobara
               file.truncate(0)
               file.rewind
               file.write(file_contents)
+              file.flush
             end
           end
 

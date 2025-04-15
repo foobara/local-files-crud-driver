@@ -1,3 +1,8 @@
+## [0.0.9] - 2025-04-15
+
+- Remove unused #fsync
+- Make sure we flush files to disk
+
 ## [0.0.8] - 2025-03-29
 
 - Fix bug where writing out one table erases another

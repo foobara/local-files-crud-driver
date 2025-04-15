@@ -10,7 +10,7 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
 
   let(:data_path) { "#{__dir__}/../tmp/records.yml" }
 
-  before do
+  let(:capybara_class) do
     stub_class "Capybara", Foobara::Entity do
       attributes do
         id :integer
@@ -24,7 +24,10 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
 
       primary_key :id
     end
+  end
 
+  before do
+    capybara_class
     FileUtils.rm_f(data_path)
     Foobara::Persistence.default_crud_driver = crud_driver
   end
