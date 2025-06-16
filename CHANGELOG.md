@@ -1,3 +1,8 @@
+## [0.0.10] - 2025-06-16
+
+- Move crud-driver-specific specs to foobara-crud-driver-spec-helpers gem
+- Delete some project cruft
+
 ## [0.0.9] - 2025-04-15
 
 - Remove unused #fsync

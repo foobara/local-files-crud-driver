@@ -31,7 +31,7 @@ module Foobara
         end
       end
 
-      def all
+      def all(page_size: nil)
         with_readable_raw_data do |raw_data|
           raw_data[table_name]&.[]("records")&.values || []
         end
