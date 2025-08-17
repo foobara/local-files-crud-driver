@@ -5,7 +5,7 @@ ruby Foobara::LocalFilesCrudDriverVersion::MINIMUM_RUBY_VERSION
 
 gemspec
 
-# gem "foobara", path: "../foobara"
+gem "foobara", path: "../foobara"
 
 gem "rake"
 
