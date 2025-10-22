@@ -5,10 +5,12 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
 
   let(:crud_driver) { described_class.new(data_path:, multi_process:) }
   let(:multi_process) { false }
-  let(:data_path) { "#{__dir__}/../tmp/records.yml" }
+  let(:data_path) { "#{__dir__}/../tmp/test_data" }
 
   before do
-    FileUtils.rm_f(data_path)
+    Dir["#{data_path}/*.yml"].each do |file|
+      FileUtils.rm(file)
+    end
     Foobara::Persistence.default_crud_driver = crud_driver
   end
 

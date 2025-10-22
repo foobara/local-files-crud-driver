@@ -4,9 +4,9 @@ require "yaml"
 module Foobara
   # TODO: lots of duplication in this file. Need to DRY this up a bit.
   class LocalFilesCrudDriver < Persistence::EntityAttributesCrudDriver
-    attr_accessor :data_path, :format, :multi_process, :raw_data
+    attr_accessor :data_path, :format, :multi_process
 
-    def initialize(data_path: "#{Dir.pwd}/local_data/records.yml", format: :yaml, multi_process: false)
+    def initialize(data_path: "#{Dir.pwd}/local_data/", format: :yaml, multi_process: false, **)
       self.data_path = data_path
       self.format = format
       self.multi_process = multi_process
@@ -21,9 +21,11 @@ module Foobara
     end
 
     class Table < Persistence::EntityAttributesCrudDriver::Table
+      attr_accessor :raw_data
+
       def get_id
         with_writeable_raw_data do |raw_data|
-          table_data = raw_data[table_name] ||= {}
+          table_data = raw_data || {}
           sequence_value = table_data["sequence"] || 1
           table_data["sequence"] = sequence_value + 1
 
@@ -33,19 +35,19 @@ module Foobara
 
       def all(page_size: nil)
         with_readable_raw_data do |raw_data|
-          raw_data[table_name]&.[]("records")&.values || []
+          raw_data&.[]("records")&.values || []
         end
       end
 
       def count
         with_readable_raw_data do |raw_data|
-          raw_data[table_name]&.[]("records")&.size || 0
+          raw_data&.[]("records")&.size || 0
         end
       end
 
       def find(record_id)
         with_readable_raw_data do |raw_data|
-          raw_data[table_name]&.[]("records")&.[](record_id)
+          raw_data&.[]("records")&.[](record_id)
         end
       end
 
@@ -73,7 +75,7 @@ module Foobara
         end
 
         with_writeable_raw_data do |raw_data|
-          table_data = raw_data[table_name] ||= {}
+          table_data = raw_data || {}
           records = table_data["records"] ||= {}
 
           if record_id
@@ -98,7 +100,7 @@ module Foobara
 
           record_id = record_id_for(attributes)
 
-          table_data = raw_data[table_name] ||= {}
+          table_data = raw_data || {}
           records = table_data["records"] ||= {}
 
           unless records.key?(record_id)
@@ -115,7 +117,7 @@ module Foobara
 
       def hard_delete(record_id)
         with_writeable_raw_data do |raw_data|
-          table_data = raw_data[table_name] ||= {}
+          table_data = raw_data || {}
           records = table_data["records"] ||= {}
 
           unless records.key?(record_id)
@@ -130,16 +132,12 @@ module Foobara
 
       def hard_delete_all
         with_writeable_raw_data do |raw_data|
-          table_data = raw_data[table_name] ||= {}
+          table_data = raw_data || {}
           table_data["records"] = {}
         end
       end
 
       private
-
-      def raw_data
-        crud_driver.raw_data
-      end
 
       def prepare_attributes_for_write(value)
         case value
@@ -159,7 +157,7 @@ module Foobara
       end
 
       def data_path
-        crud_driver.data_path
+        "#{crud_driver.data_path}/#{table_name}.yml"
       end
 
       def multi_process
@@ -180,7 +178,7 @@ module Foobara
             f.flock(lock)
             yaml = f.read
             raw_data = yaml.empty? ? {} : YAML.load(yaml)
-            crud_driver.raw_data = raw_data unless multi_process
+            self.raw_data = raw_data unless multi_process
             yield raw_data, f
           end
         elsif self.raw_data
@@ -217,7 +215,7 @@ module Foobara
           end
 
           unless multi_process
-            crud_driver.raw_data = raw_data
+            self.raw_data = raw_data
           end
         end
 
