@@ -17,7 +17,7 @@ module Foobara
         # :nocov:
       end
 
-      super
+      super(**)
     end
 
     class Table < Persistence::EntityAttributesCrudDriver::Table

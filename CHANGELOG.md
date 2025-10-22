@@ -1,3 +1,11 @@
+## [0.2.0] - 2025-10-21
+
+!!!WARNING! This will no-longer be able to access old records in recrods.yml!
+If this impacts you let me know and I can help you migrate!!! Or pin to < 0.2.0 but still inform me please!
+
+- Write data to one-file-per-entity-class instead of one big file
+- Fix bug that passes invalid options to EntityAttributesCrudDriver#initialize
+
 ## [0.0.10] - 2025-06-16
 
 - Move crud-driver-specific specs to foobara-crud-driver-spec-helpers gem
