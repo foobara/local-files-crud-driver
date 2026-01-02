@@ -23,16 +23,6 @@ module Foobara
     class Table < Persistence::EntityAttributesCrudDriver::Table
       attr_accessor :raw_data
 
-      def get_id
-        with_writeable_raw_data do |raw_data|
-          table_data = raw_data || {}
-          sequence_value = table_data["sequence"] || 1
-          table_data["sequence"] = sequence_value + 1
-
-          sequence_value
-        end
-      end
-
       def all(page_size: nil)
         with_readable_raw_data do |raw_data|
           raw_data&.[]("records")&.values || []
@@ -138,6 +128,16 @@ module Foobara
       end
 
       private
+
+      def get_id
+        with_writeable_raw_data do |raw_data|
+          table_data = raw_data || {}
+          sequence_value = table_data["sequence"] || 1
+          table_data["sequence"] = sequence_value + 1
+
+          sequence_value
+        end
+      end
 
       def prepare_attributes_for_write(value)
         case value
