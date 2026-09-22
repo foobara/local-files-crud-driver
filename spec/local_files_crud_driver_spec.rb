@@ -16,11 +16,10 @@ RSpec.describe Foobara::LocalFilesCrudDriver do
 
   it_behaves_like_a_crud_driver
 
-  # rubocop:disable RSpec/EmptyExampleGroup
+  # rubocop:disable-next RSpec/EmptyExampleGroup
   context "when multi process" do
     let(:multi_process) { true }
 
     it_behaves_like_a_crud_driver
   end
-  # rubocop:enable RSpec/EmptyExampleGroup
 end

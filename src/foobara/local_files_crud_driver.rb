@@ -12,9 +12,9 @@ module Foobara
       self.multi_process = multi_process
 
       unless format == :yaml
-        # :nocov:
+        # simplecov:disable
         raise ArgumentError, "Only :yaml format is supported for now"
-        # :nocov:
+        # simplecov:enable
       end
 
       super(**)
@@ -46,9 +46,9 @@ module Foobara
         attributes = find(record_id)
 
         unless attributes
-          # :nocov:
+          # simplecov:disable
           raise CannotFindError.new(record_id, "does not exist")
-          # :nocov:
+          # simplecov:enable
         end
 
         attributes
@@ -70,9 +70,9 @@ module Foobara
 
           if record_id
             if records.key?(record_id)
-              # :nocov:
+              # simplecov:disable
               raise CannotInsertError.new(record_id, "already exists")
-              # :nocov:
+              # simplecov:enable
             end
           end
 
@@ -94,9 +94,9 @@ module Foobara
           records = table_data["records"] ||= {}
 
           unless records.key?(record_id)
-            # :nocov:
+            # simplecov:disable
             raise CannotUpdateError.new(record_id, "does not exist")
-            # :nocov:
+            # simplecov:enable
           end
 
           records[record_id] = attributes
@@ -111,9 +111,9 @@ module Foobara
           records = table_data["records"] ||= {}
 
           unless records.key?(record_id)
-            # :nocov:
+            # simplecov:disable
             raise CannotDeleteError.new(record_id, "does not exist")
-            # :nocov:
+            # simplecov:enable
           end
 
           records.delete(record_id)
